@@ -1,0 +1,16 @@
+{
+  "name": "culinary-management-system",
+  "version": "1.0.0",
+  "description": "CulinaryHub - Full Stack MERN Recipe Management System",
+  "scripts": {
+    "install-all": "npm install --prefix backend && npm install --prefix frontend",
+    "seed": "node backend/scripts/seed.js",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm start --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "build:frontend": "npm run build --prefix frontend"
+  },
+  "keywords": ["mern", "recipe", "cooking", "fullstack"],
+  "author": "CulinaryHub",
+  "license": "MIT"
+}

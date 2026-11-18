@@ -1,0 +1,9 @@
+node_modules/
+.env
+*.log
+.DS_Store
+backend/uploads/profiles/*
+backend/uploads/recipes/*
+!backend/uploads/profiles/.gitkeep
+!backend/uploads/recipes/.gitkeep
+frontend/build/
