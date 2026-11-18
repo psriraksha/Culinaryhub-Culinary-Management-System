@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getImageUrl, PLACEHOLDER } from '../../utils/imageUrl'; // CHANGED: new import
+import { getImageUrl, PLACEHOLDER } from '../../imageUrl'; // CHANGED: new import
 
 const StarRating = ({ rating, size = 'sm' }) => {
   const s = size === 'sm' ? 'text-sm' : 'text-base';

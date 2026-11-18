@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipe, clearCurrentRecipe } from '../../redux/slices/recipeSlice';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import api from '../../utils/api';
-import { getImageUrl, PLACEHOLDER } from '../../utils/imageUrl'; // CHANGED: new import
+import { getImageUrl, PLACEHOLDER } from '../../imageUrl'; // CHANGED: new import
 import toast from 'react-hot-toast';
 
 const StarInput = ({ value, onChange }) => (
