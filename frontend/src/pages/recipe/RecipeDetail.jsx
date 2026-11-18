@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRecipe, clearCurrentRecipe } from '../../redux/slices/recipeSlice';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import api from '../../utils/api';
+import { getImageUrl, PLACEHOLDER } from '../../utils/imageUrl'; // CHANGED: new import
 import toast from 'react-hot-toast';
 
 const StarInput = ({ value, onChange }) => (
@@ -90,7 +91,12 @@ const RecipeDetail = () => {
       {/* Hero */}
       <div className="relative rounded-3xl overflow-hidden mb-8 shadow-warm-lg">
         {recipe.image ? (
-          <img src={`http://localhost:5000${recipe.image}`} alt={recipe.title} className="w-full h-80 object-cover" />
+          <img
+            src={getImageUrl(recipe.image)} // CHANGED: no more localhost
+            alt={recipe.title}
+            className="w-full h-80 object-cover"
+            onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER; }}
+          />
         ) : (
           <div className="w-full h-80 bg-gradient-to-br from-orange-200 to-amber-200 flex items-center justify-center">
             <span className="text-8xl">🍽️</span>
@@ -182,8 +188,8 @@ const RecipeDetail = () => {
           {/* Tags */}
           {recipe.tags?.length > 0 && (
             <div className="mt-6 flex flex-wrap gap-2">
-              {recipe.tags.map(tag => (
-                <span key={tag} className="bg-orange-100 text-orange-700 text-xs font-medium px-3 py-1.5 rounded-full">
+              {recipe.tags.map((tag, i) => (
+                <span key={`${tag}-${i}`} className="bg-orange-100 text-orange-700 text-xs font-medium px-3 py-1.5 rounded-full">
                   #{tag}
                 </span>
               ))}
@@ -226,7 +232,12 @@ const RecipeDetail = () => {
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-300 to-amber-300 flex items-center justify-center text-white font-bold overflow-hidden">
                         {c.user?.profileImage ? (
-                          <img src={`http://localhost:5000${c.user.profileImage}`} alt="" className="w-full h-full object-cover" />
+                          <img
+                            src={getImageUrl(c.user.profileImage)} // CHANGED
+                            alt=""
+                            className="w-full h-full object-cover"
+                            onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
+                          />
                         ) : c.user?.name?.charAt(0)}
                       </div>
                       <div>
@@ -285,7 +296,12 @@ const RecipeDetail = () => {
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-amber-300 flex items-center justify-center text-white font-bold text-lg overflow-hidden">
                   {recipe.author.profileImage ? (
-                    <img src={`http://localhost:5000${recipe.author.profileImage}`} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={getImageUrl(recipe.author.profileImage)} // CHANGED
+                      alt=""
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
+                    />
                   ) : recipe.author.name?.charAt(0)}
                 </div>
                 <div>

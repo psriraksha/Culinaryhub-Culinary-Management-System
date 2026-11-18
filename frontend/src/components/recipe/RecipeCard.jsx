@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getImageUrl, PLACEHOLDER } from '../../utils/imageUrl'; // CHANGED: new import
 
 const StarRating = ({ rating, size = 'sm' }) => {
   const s = size === 'sm' ? 'text-sm' : 'text-base';
@@ -32,9 +33,10 @@ const RecipeCard = ({ recipe, showStatus = false }) => {
         <div className="relative overflow-hidden h-48">
           {recipe.image ? (
             <img
-              src={`http://localhost:5000${recipe.image}`}
+              src={getImageUrl(recipe.image)} // CHANGED: no more localhost
               alt={recipe.title}
               className="recipe-card-img"
+              onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER; }}
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">
@@ -79,7 +81,12 @@ const RecipeCard = ({ recipe, showStatus = false }) => {
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded-full bg-gradient-to-br from-orange-300 to-amber-300 flex items-center justify-center text-white text-xs font-bold overflow-hidden">
               {recipe.author?.profileImage ? (
-                <img src={`http://localhost:5000${recipe.author.profileImage}`} alt="" className="w-full h-full object-cover" />
+                <img
+                  src={getImageUrl(recipe.author.profileImage)} // CHANGED
+                  alt=""
+                  className="w-full h-full object-cover"
+                  onError={(e) => { e.target.onerror = null; e.target.style.display = 'none'; }}
+                />
               ) : (
                 recipe.author?.name?.charAt(0) || '?'
               )}
