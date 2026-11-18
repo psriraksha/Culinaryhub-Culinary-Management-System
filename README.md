@@ -1,236 +1,117 @@
-# 🍳 CulinaryHub — Culinary Management System
+# CulinaryHub: Culinary Management System
 
-A full-stack MERN application for sharing and managing recipes with an admin approval workflow, built with an orange-yellow theme.
+A full-stack recipe platform built with the MERN stack. Users can browse, share, rate and bookmark recipes, and admins review and manage everything from a dashboard.
 
----
+**Live demo:** [culinaryhub-culinary-management-sys-five.vercel.app](https://culinaryhub-culinary-management-sys-five.vercel.app)
 
-## 🚀 Features
+> The backend runs on a free plan, so the first page can take up to a minute to load. Please wait and refresh once.
 
-### User Features
-- Register & Login with JWT authentication
-- Submit recipes (Pending → Admin Review → Approved/Rejected)
-- Edit & delete own recipes
-- View recipe status from personal dashboard
-- Rate & review approved recipes
-- Bookmark favorite recipes
-- Update profile & upload profile photo
+## Screenshots
 
-### Admin Features
-- Secure admin login (separate endpoint)
-- Dashboard with live statistics & charts
-- Approve or reject recipes with optional rejection reason
-- Manage all users (activate / suspend / delete)
-- Moderate comments & ratings
-- View all recipes with filters
+| Home | Recipe details |
+|---|---|
+| ![Home](screenshots/home.png) | ![Recipe details](screenshots/recipe-detail.png) |
 
----
+| Admin dashboard | Recipe approval |
+|---|---|
+| ![Admin dashboard](screenshots/admin-dashboard.png) | ![Recipe approval](screenshots/admin-recipes.png) |
 
-## 🛠 Tech Stack
+## Features
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, Redux Toolkit, Tailwind CSS, Framer Motion |
-| Backend | Node.js, Express.js |
-| Database | MongoDB + Mongoose |
-| Auth | JWT + bcrypt.js |
-| File Uploads | Multer |
-| HTTP Client | Axios |
-| Notifications | React Hot Toast |
+**For users**
+- Register and log in securely (JWT authentication)
+- Browse and search recipes, and see the top-rated ones on the home page
+- Submit new recipes with ingredients, steps, cooking time, servings and difficulty
+- Rate recipes, comment on them, and bookmark favourites
 
----
+**For admins**
+- Separate admin login and dashboard
+- Approve or reject submitted recipes before they go public
+- Manage users, recipes and comments
+- Role-based access: admin pages are blocked for normal users
 
-## 📁 Project Structure
+## Tech Stack
+
+| Area | Technology |
+|---|---|
+| Frontend | React, Redux Toolkit, React Router, Tailwind CSS, Framer Motion, Axios |
+| Backend | Node.js, Express |
+| Database | MongoDB Atlas, Mongoose |
+| Auth | JSON Web Tokens (JWT), bcrypt password hashing |
+| Hosting | Vercel (frontend), Render (backend), MongoDB Atlas (database) |
+
+## Project Structure
 
 ```
-culinary-management-system/
-├── backend/
-│   ├── config/          # DB connection
-│   ├── controllers/     # Route logic
-│   ├── middleware/       # Auth + upload
-│   ├── models/          # Mongoose schemas
-│   ├── routes/          # Express routes
-│   ├── uploads/         # Uploaded images (auto-created)
-│   ├── .env.example
-│   └── server.js
+culinaryhub/
+├── backend/            Express API (server.js), models, routes, controllers
 └── frontend/
-    ├── public/
     └── src/
-        ├── components/
-        │   ├── admin/   # AdminSidebar
-        │   ├── common/  # Navbar, Footer, ProtectedRoute, Spinner
-        │   └── recipe/  # RecipeCard, RecipeForm
-        ├── pages/
-        │   ├── admin/   # Dashboard, Users, Recipes, Comments
-        │   ├── auth/    # Login, Register, AdminLogin
-        │   ├── recipe/  # List, Detail, Submit, Edit
-        │   ├── user/    # Dashboard, Profile, Bookmarks
-        │   └── Home.jsx
-        ├── redux/
-        │   ├── slices/  # authSlice, recipeSlice
-        │   └── store.js
-        └── utils/api.js
+        ├── components/   shared and recipe components
+        ├── pages/        home, auth, recipe, user and admin pages
+        ├── redux/        store and slices
+        └── utils/api.js  Axios setup
 ```
 
----
+## How It Works
 
-## ⚡ Quick Start
+1. A user registers and logs in. The server returns a JWT, which the frontend sends with every request.
+2. The user submits a recipe. It is saved as **pending**.
+3. An admin reviews it and approves or rejects it. Only approved recipes show on the public pages.
+4. Other users can then view, rate, comment on and bookmark the recipe.
 
-### 1. Clone & Install
+## Getting Started
 
+**You need:** Node.js 18 or newer and a MongoDB database (local or MongoDB Atlas).
+
+**1. Clone the project**
 ```bash
-# Backend
+git clone https://github.com/psriraksha/CulinaryHub-Culinary-Management-System.git
+cd CulinaryHub-Culinary-Management-System
+```
+
+**2. Backend**
+```bash
 cd backend
 npm install
-cp .env.example .env
-# Edit .env with your MongoDB URI and JWT secret
-
-# Frontend
-cd ../frontend
-npm install
 ```
-
-### 2. Configure Environment
-
-Edit `backend/.env`:
-```env
+Create a `.env` file in the `backend` folder:
+```
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/culinary_db
-JWT_SECRET=your_super_secret_key_here
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_long_random_secret
 JWT_EXPIRE=7d
 NODE_ENV=development
+CLIENT_URL=http://localhost:3000
 ```
-
-### 3. Create Admin User
-
-After starting the backend, use MongoDB shell or Compass to insert an admin user:
-
-```js
-// In MongoDB shell
-use culinary_db
-
-db.users.insertOne({
-  name: "Admin User",
-  email: "admin@culinaryhub.com",
-  password: "$2a$10$rM5VUzJLVJrH5Q3JZFxPxeHqkKVtTR4EfMrfQUUxTSKpnhEm9P3Ai", // "admin123"
-  role: "admin",
-  status: "active",
-  createdAt: new Date(),
-  updatedAt: new Date()
-})
-```
-
-Or run the seed script:
+Start it:
 ```bash
-cd backend
-node scripts/seed.js
+npm run dev
 ```
 
-### 4. Start Servers
-
+**3. Frontend**
 ```bash
-# Terminal 1 — Backend
-cd backend
-npm run dev     # uses nodemon
-# or: npm start
-
-# Terminal 2 — Frontend
 cd frontend
+npm install
+```
+Create a `.env` file in the `frontend` folder:
+```
+REACT_APP_API_URL=http://localhost:5000/api
+```
+Start it:
+```bash
 npm start
 ```
+Open `http://localhost:3000`. Register an account to try the user features.
 
-### 5. Open in Browser
+## Deployment
 
-| URL | Page |
-|-----|------|
-| http://localhost:3000 | User App |
-| http://localhost:3000/admin-login | Admin Login |
-| http://localhost:5000/api/health | API Health Check |
+- **Database:** MongoDB Atlas
+- **Backend:** Render, with `MONGO_URI`, `JWT_SECRET`, `JWT_EXPIRE`, `NODE_ENV` and `CLIENT_URL` (the Vercel link) as environment variables
+- **Frontend:** Vercel, with `REACT_APP_API_URL` set to the Render link ending in `/api`
 
----
+## Author
 
-## 🔐 Default Admin Credentials
-
-| Field | Value |
-|-------|-------|
-| Email | admin@culinaryhub.com |
-| Password | admin123 |
-
-> ⚠️ Change these immediately in production!
-
----
-
-## 📋 API Endpoints
-
-### Auth
-| Method | Route | Description |
-|--------|-------|-------------|
-| POST | /api/auth/register | Register user |
-| POST | /api/auth/login | User login |
-| POST | /api/auth/admin-login | Admin login |
-| GET | /api/auth/me | Get current user |
-
-### Recipes
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | /api/recipes | Get approved recipes |
-| GET | /api/recipes/:id | Get single recipe |
-| POST | /api/recipes | Submit recipe |
-| PUT | /api/recipes/:id | Update recipe |
-| DELETE | /api/recipes/:id | Delete recipe |
-| GET | /api/recipes/my-recipes | User's own recipes |
-| POST | /api/recipes/:id/rate | Rate recipe |
-| POST | /api/recipes/:id/bookmark | Toggle bookmark |
-
-### Admin
-| Method | Route | Description |
-|--------|-------|-------------|
-| GET | /api/admin/stats | Dashboard stats |
-| GET | /api/admin/users | All users |
-| PUT | /api/admin/users/:id/status | Toggle user status |
-| DELETE | /api/admin/users/:id | Delete user |
-| GET | /api/admin/recipes | All recipes |
-| PUT | /api/admin/recipes/:id/status | Approve/Reject recipe |
-| GET | /api/admin/comments | All comments |
-| DELETE | /api/admin/comments/:id | Delete comment |
-
----
-
-## 🎨 Theme
-
-Orange-Yellow warm palette:
-- **Primary**: `#ff7510` (Orange)
-- **Secondary**: `#f5a623` (Saffron)
-- **Accent**: `#FFA500` (Amber)
-- **Background**: `#fff8ed` (Cream)
-- **Font**: Playfair Display (headings) + Inter (body)
-
----
-
-## 📦 Deployment Notes
-
-- Set `NODE_ENV=production` in backend `.env`
-- Use a cloud MongoDB instance (MongoDB Atlas)
-- Store uploaded images on cloud storage (AWS S3 / Cloudinary) for production
-- Build frontend: `npm run build` inside `/frontend`
-- Serve frontend build from Express static middleware or a CDN
-
----
-
-## 📝 Recipe Workflow
-
-```
-User submits recipe
-       ↓
-  Status: PENDING
-       ↓
-Admin reviews recipe
-  ↙         ↘
-APPROVE     REJECT (with reason)
-  ↓               ↓
-Public         User notified
-visible        via dashboard
-```
-
----
-
-Built with ❤️ using the MERN Stack
+**P Sriraksha**
+GitHub: [github.com/psriraksha](https://github.com/psriraksha)
+LinkedIn: [linkedin.com/in/p-sriraksha-2a5758379](https://linkedin.com/in/p-sriraksha-2a5758379)
