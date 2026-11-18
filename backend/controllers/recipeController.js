@@ -102,8 +102,9 @@ exports.createRecipe = async (req, res) => {
       approvalStatus: 'Pending'
     };
 
+    // CHANGED: Cloudinary gives a full https link in req.file.path
     if (req.file) {
-      recipeData.image = `/uploads/recipes/${req.file.filename}`;
+      recipeData.image = req.file.path;
     }
 
     const recipe = await Recipe.create(recipeData);
@@ -146,13 +147,23 @@ exports.updateRecipe = async (req, res) => {
       updateData.cookingTime = JSON.parse(req.body.cookingTime);
     }
 
+    // CHANGED: parse tags as a list (fixes corrupted tags)
+    if (req.body.tags && typeof req.body.tags === 'string') {
+      try {
+        updateData.tags = JSON.parse(req.body.tags);
+      } catch (e) {
+        updateData.tags = req.body.tags.split(',').map(t => t.trim()).filter(Boolean);
+      }
+    }
+
     // Reset to pending if user (not admin) updates
     if (isOwner && !isAdmin) {
       updateData.approvalStatus = 'Pending';
     }
 
+    // CHANGED: Cloudinary gives a full https link in req.file.path
     if (req.file) {
-      updateData.image = `/uploads/recipes/${req.file.filename}`;
+      updateData.image = req.file.path;
     }
 
     recipe = await Recipe.findByIdAndUpdate(req.params.id, updateData, { new: true, runValidators: true });
